@@ -13,7 +13,7 @@ class StockAlert:
     > stock_alert(loops = 60 * 6)
   """
 
-  def __init__(self, ticker, percentage_threshold = -.01, ACCESS_TOKEN, *,
+  def __init__(self, ticker, percentage_threshold, ACCESS_TOKEN, *,
                sleep_seconds = 60,
                notify_only_once = True,
                api_url = 'https://api.pushbullet.com/v2/pushes',
