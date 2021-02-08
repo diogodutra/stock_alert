@@ -1,6 +1,7 @@
 import requests
 import json
 import datetime
+import pytz
 import time
 from yahoo_fin import stock_info as si
 
@@ -16,6 +17,7 @@ class StockAlert:
   def __init__(self, ticker, percentage_threshold, ACCESS_TOKEN, *,
                sleep_seconds = 60,
                notify_only_once = True,
+               timezone = 'UTC',
                api_url = 'https://api.pushbullet.com/v2/pushes',
                ):
     self.ticker = ticker #(str): stock ticker id (ie: AAPL)
@@ -24,6 +26,7 @@ class StockAlert:
     self.ACCESS_TOKEN = ACCESS_TOKEN #(str): pushbullet API access token
     self.api_url = api_url #(str): URL for the pushbullet API
     self.notify_only_once = notify_only_once #(bool): break loop when a notification is sent
+    self.timezone = timezone #(str, default 'UTC'): timezone identifier for tzinfo subclass from pytz module 
 
 
   def _notify(self, title, body):
@@ -68,8 +71,10 @@ class StockAlert:
                 or (self.percentage_threshold < 0) and (percentage_variation < self.percentage_threshold)
       if send_alert:        
         self._notify(self.ticker, 'reached {:.2f}'.format(price))
+        tz = pytz.timezone(self.timezone)
         print('alert sent for {} at price {:.2f} variation:{:.1%} threshold:{:.1%} {}'.format(
-            self.ticker, price, percentage_variation, self.percentage_threshold, str(datetime.datetime.now().strftime('at %H:%M:%S of %D'))))
+            self.ticker, price, percentage_variation, self.percentage_threshold,
+            str(datetime.datetime.now(tz).strftime('at %H:%M:%S of %D'))))
         
         if self.notify_only_once:
           # exit loop
