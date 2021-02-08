@@ -21,12 +21,12 @@ class StockAlert:
                api_url = 'https://api.pushbullet.com/v2/pushes',
                ):
     self.ticker = ticker #(str): stock ticker id (ie: AAPL)
-    self.sleep_seconds = sleep_seconds #(int): time between loops of stock check
-    self.percentage_threshold = percentage_threshold #(float): alert above/beyond the stock open price
+    self.percentage_threshold = percentage_threshold #(float): alert above/beyond the stock open price of today
     self.ACCESS_TOKEN = ACCESS_TOKEN #(str): pushbullet API access token
+    self.sleep_seconds = sleep_seconds #(int, default 60): time between loops of live stock online check
+    self.notify_only_once = notify_only_once #(bool, default True): break loop when a notification is sent
+    self.timezone = timezone #(str, default 'UTC'): timezone identifier for tzinfo subclass from pytz module
     self.api_url = api_url #(str): URL for the pushbullet API
-    self.notify_only_once = notify_only_once #(bool): break loop when a notification is sent
-    self.timezone = timezone #(str, default 'UTC'): timezone identifier for tzinfo subclass from pytz module 
 
 
   def _notify(self, title, body):
